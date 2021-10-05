@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-redis/redis"
 )
 
 // 定义一个全局对象db
