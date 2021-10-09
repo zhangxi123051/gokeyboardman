@@ -3,8 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	//"github.com/go-redis/redis"
-	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redis"
 	"log"
 	"time"
 )
@@ -315,8 +314,548 @@ func hvals(hashTable string) {
 	}
 }
 
+//list类型数据操作
+
+//list类型数据操作
+//redis命令：lpush mylist val1 val2 val3 ...
+func lpush(ctx context.Context, mylist, val1, val2, val3 string) {
+
+	//返回列表的总长度（即有多少个元素在列表中）
+	n, err := client.LPush(ctx, mylist, val1, val2, val3).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：rpush mylist val1 val2 val3 ...
+func rpush(ctx context.Context, mylist, val1, val2, val3 string) {
+
+	//返回列表的总长度（即有多少个元素在列表中）
+	n, err := client.RPush(ctx, mylist, val1, val2, val3).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：lpop mylist
+func lpop(ctx context.Context, mylist string) {
+
+	//返回被删除的值
+	val, err := client.LPop(ctx, mylist).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(val)
+}
+
+//redis命令：rpop mylist
+func rpop(ctx context.Context, mylist string) {
+
+	//返回被删除的值
+	val, err := client.RPop(ctx, mylist).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(val)
+}
+
+//redis命令：lrem mylist count val
+func lrem(ctx context.Context, mylist, val string, count int64) {
+
+	//返回成功删除的val的数量
+	n, err := client.LRem(ctx, mylist, count, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：ltrim mylist start end
+func ltrim(ctx context.Context, mylist string, start, end int64) {
+
+	//返回状态（OK）
+	status, err := client.LTrim(ctx, mylist, start, end).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(status)
+}
+
+//redis命令：lset mylist index val
+func lset(ctx context.Context, mylist, val string, index int64) {
+
+	status, err := client.LSet(ctx, mylist, index, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(status)
+}
+
+//redis命令：lindex mylist index
+func lindex(ctx context.Context, mylist string, index int64) {
+
+	//通过索引查找字符串
+	val, err := client.LIndex(ctx, mylist, index).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(val)
+}
+
+//redis命令：lrange mylist start end
+func lrange(ctx context.Context, mylist string, start, end int64) {
+
+	vals, err := client.LRange(ctx, mylist, start, end).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//redis命令：llen mylist
+func llen(ctx context.Context, mylist string) {
+
+	len, err := client.LLen(ctx, mylist).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(len)
+}
+
+//无序集合set类型数据操作
+//redis命令：sadd myset val1 val2 val3 ...
+func sadd(ctx context.Context, myset, val1, val2, val3 string) {
+
+	n, err := client.SAdd(ctx, myset, val1, val2, val3).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：srem myset val
+func srem(myset, val string) {
+
+	//删除集合中的值并返回其索引
+	index, err := client.SRem(myset, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(index)
+}
+
+//redis命令：spop myset
+func spop(myset string) {
+
+	//随机删除一个值并返回
+	val, err := client.SPop(myset).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(val)
+}
+
+//redis命令：smembers myset
+func smembers(myset string) {
+
+	vals, err := client.SMembers(myset).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//redis命令：scard myset
+func scard(myset string) {
+
+	len, err := client.SCard(myset).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(len)
+}
+
+//redis命令：sismember myset val
+func sismember(myset, val string) {
+
+	//判断值是否为集合中的成员
+	isMember, err := client.SIsMember(myset, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(isMember)
+}
+
+//redis命令：srandmember myset count
+func srandmembers(myset string, count int64) {
+
+	vals, err := client.SRandMemberN(myset, count).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//该函数是上一个函数在只随机取一个元素的情况
+func srandmember(myset string) {
+
+	val, err := client.SRandMember(myset).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(val)
+}
+
+//redis命令：smove myset myset2 val
+func smove(myset, myset2, val string) {
+
+	isSuccessful, err := client.SMove(myset, myset2, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(isSuccessful)
+}
+
+//redis命令：sunion myset myset2 ...
+func sunion(myset, myset2 string) {
+
+	vals, err := client.SUnion(myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//redis命令：sunionstore desset myset myset2 ...
+func sunionstore(desset, myset, myset2 string) {
+
+	//返回新集合的长度
+	n, err := client.SUnionStore(desset, myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：sinter myset myset2 ...
+func sinter(myset, myset2 string) {
+
+	vals, err := client.SInter(myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//redis命令：sinterstore desset myset myset2 ...
+func sinterstore(desset, myset, myset2 string) {
+
+	n, err := client.SInterStore(desset, myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：sdiff myset myset2 ...
+func sdiff(myset, myset2 string) {
+
+	vals, err := client.SDiff(myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+
+	for k, v := range vals {
+
+		fmt.Printf("k = %v v = %s\n", k, v)
+	}
+}
+
+//redis命令：sdiffstore desset myset myset2 ...
+func sdiffstore(desset, myset, myset2 string) {
+
+	n, err := client.SDiffStore(desset, myset, myset2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//有序集合zset类型数据操作
+//redis命令：zadd myzset score1 val1 score2 val2 score3 val3 ...
+func zadd(myzset, val1, val2, val3 string, score1, score2, score3 float64) {
+
+	member1 := &redis.Z{
+		score1, val1}
+	member2 := &redis.Z{
+		score2, val2}
+	member3 := &redis.Z{
+		score3, val3}
+
+	n, err := client.ZAdd(myzset, member1, member2, member3).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：zrem myzset val1 val2 ...
+func zrem(myzset, val1, val2 string) {
+
+	n, err := client.ZRem(myzset, val1, val2).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：srange myzset start end [withscores]
+func zrange(myzset string, start, end, flag int64) {
+
+	if flag == 0 {
+
+		//不加withscores
+		vals, err := client.ZRange(myzset, start, end).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range vals {
+
+			fmt.Printf("k = %v v = %s\n", k, v)
+		}
+	} else if flag == 1 {
+
+		//加withscores
+		svals, err := client.ZRangeWithScores(myzset, start, end).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range svals {
+
+			fmt.Printf("k = %v v = %s s = %.2f\n", k, v.Member, v.Score)
+		}
+	}
+}
+
+//redis命令：srevrange myzset start end [withscores]
+func zrevrange(myzset string, start, end, flag int64) {
+
+	if flag == 0 {
+
+		//不加withscores
+		vals, err := client.ZRevRange(myzset, start, end).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range vals {
+
+			fmt.Printf("k = %v v = %s\n", k, v)
+		}
+	} else if flag == 1 {
+
+		//加withscores
+		svals, err := client.ZRevRangeWithScores(myzset, start, end).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range svals {
+
+			fmt.Printf("k = %v v = %s s = %.2f\n", k, v.Member, v.Score)
+		}
+	}
+}
+
+//redis命令：zrangebyscore myzset start end [withscores]
+func zrangebyscore(myzset, start, end string, flag int) {
+
+	if flag == 0 {
+
+		//不加withscores
+		vals, err := client.ZRangeByScore(myzset, &redis.ZRangeBy{
+			Min: start, Max: end, Count: 0}).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range vals {
+
+			fmt.Printf("k = %v v = %s\n", k, v)
+		}
+	} else if flag == 1 {
+
+		//加withscores
+		svals, err := client.ZRangeByScoreWithScores(myzset, &redis.ZRangeBy{
+			Min: start, Max: end, Count: 0}).Result()
+
+		if err != nil {
+
+			log.Fatal(err)
+		}
+
+		for k, v := range svals {
+
+			fmt.Printf("k = %v v = %s s = %.2f\n", k, v.Member, v.Score)
+		}
+	}
+}
+
+//redis命令：zcard myzset
+func zcard(myzset string) {
+
+	len, err := client.ZCard(myzset).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(len)
+}
+
+//redis命令：zcount myzset minscore maxscore
+func zcount(myzset, minscore, maxscore string) {
+
+	n, err := client.ZCount(myzset, minscore, maxscore).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+}
+
+//redis命令：zrank myzset val
+func zrank(myzset, val string) {
+
+	index, err := client.ZRank(myzset, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(index)
+}
+
+//redis命令：zscore myzset val
+func zscore(myzset, val string) {
+
+	score, err := client.ZScore(myzset, val).Result()
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	fmt.Println(score)
+}
+
 func main() {
 	goRedisConnect()
-	set("key1", "value1")
-	get("key1")
+	//set("key1", "value1")
+	//get("key1")
+
+	//hset("hs","k1","v1")
+	//hset("hs","k2","v2")
+	//hset("hs","k3","v3")
+	//
+	//
+	//hget("hs","k2")
+	//hkeys("hs")
+	//hvals("hs")
+	//
+	//hlen("hs")
+	var ctx context.Context
+	ctx = context.Background()
+
+	//lset(ctx,"list","value-1",1)
+	//lindex(ctx,"list",0)
+	lrange(ctx, "list", 0, 1)
 }
