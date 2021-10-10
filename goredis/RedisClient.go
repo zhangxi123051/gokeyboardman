@@ -462,10 +462,10 @@ func sadd(ctx context.Context, myset, val1, val2, val3 string) {
 }
 
 //redis命令：srem myset val
-func srem(myset, val string) {
+func srem(ctx context.Context, myset, val string) {
 
 	//删除集合中的值并返回其索引
-	index, err := client.SRem(myset, val).Result()
+	index, err := client.SRem(ctx, myset, val).Result()
 
 	if err != nil {
 
@@ -475,10 +475,10 @@ func srem(myset, val string) {
 }
 
 //redis命令：spop myset
-func spop(myset string) {
+func spop(ctx context.Context, myset string) {
 
 	//随机删除一个值并返回
-	val, err := client.SPop(myset).Result()
+	val, err := client.SPop(ctx, myset).Result()
 
 	if err != nil {
 
@@ -488,9 +488,9 @@ func spop(myset string) {
 }
 
 //redis命令：smembers myset
-func smembers(myset string) {
+func smembers(ctx context.Context, myset string) {
 
-	vals, err := client.SMembers(myset).Result()
+	vals, err := client.SMembers(ctx, myset).Result()
 
 	if err != nil {
 
@@ -504,9 +504,9 @@ func smembers(myset string) {
 }
 
 //redis命令：scard myset
-func scard(myset string) {
+func scard(ctx context.Context, myset string) {
 
-	len, err := client.SCard(myset).Result()
+	len, err := client.SCard(ctx, myset).Result()
 
 	if err != nil {
 
@@ -516,10 +516,10 @@ func scard(myset string) {
 }
 
 //redis命令：sismember myset val
-func sismember(myset, val string) {
+func sismember(ctx context.Context, myset, val string) {
 
 	//判断值是否为集合中的成员
-	isMember, err := client.SIsMember(myset, val).Result()
+	isMember, err := client.SIsMember(ctx, myset, val).Result()
 
 	if err != nil {
 
@@ -529,9 +529,9 @@ func sismember(myset, val string) {
 }
 
 //redis命令：srandmember myset count
-func srandmembers(myset string, count int64) {
+func srandmembers(ctx context.Context, myset string, count int64) {
 
-	vals, err := client.SRandMemberN(myset, count).Result()
+	vals, err := client.SRandMemberN(ctx, myset, count).Result()
 
 	if err != nil {
 
@@ -545,9 +545,9 @@ func srandmembers(myset string, count int64) {
 }
 
 //该函数是上一个函数在只随机取一个元素的情况
-func srandmember(myset string) {
+func srandmember(ctx context.Context, myset string) {
 
-	val, err := client.SRandMember(myset).Result()
+	val, err := client.SRandMember(ctx, myset).Result()
 
 	if err != nil {
 
@@ -557,9 +557,9 @@ func srandmember(myset string) {
 }
 
 //redis命令：smove myset myset2 val
-func smove(myset, myset2, val string) {
+func smove(ctx context.Context, myset, myset2, val string) {
 
-	isSuccessful, err := client.SMove(myset, myset2, val).Result()
+	isSuccessful, err := client.SMove(ctx, myset, myset2, val).Result()
 
 	if err != nil {
 
@@ -569,9 +569,9 @@ func smove(myset, myset2, val string) {
 }
 
 //redis命令：sunion myset myset2 ...
-func sunion(myset, myset2 string) {
+func sunion(ctx context.Context, myset, myset2 string) {
 
-	vals, err := client.SUnion(myset, myset2).Result()
+	vals, err := client.SUnion(ctx, myset, myset2).Result()
 
 	if err != nil {
 
@@ -585,10 +585,10 @@ func sunion(myset, myset2 string) {
 }
 
 //redis命令：sunionstore desset myset myset2 ...
-func sunionstore(desset, myset, myset2 string) {
+func sunionstore(ctx context.Context, desset, myset, myset2 string) {
 
 	//返回新集合的长度
-	n, err := client.SUnionStore(desset, myset, myset2).Result()
+	n, err := client.SUnionStore(ctx, desset, myset, myset2).Result()
 
 	if err != nil {
 
@@ -598,9 +598,9 @@ func sunionstore(desset, myset, myset2 string) {
 }
 
 //redis命令：sinter myset myset2 ...
-func sinter(myset, myset2 string) {
+func sinter(ctx context.Context, myset, myset2 string) {
 
-	vals, err := client.SInter(myset, myset2).Result()
+	vals, err := client.SInter(ctx, myset, myset2).Result()
 
 	if err != nil {
 
@@ -614,9 +614,9 @@ func sinter(myset, myset2 string) {
 }
 
 //redis命令：sinterstore desset myset myset2 ...
-func sinterstore(desset, myset, myset2 string) {
+func sinterstore(ctx context.Context, desset, myset, myset2 string) {
 
-	n, err := client.SInterStore(desset, myset, myset2).Result()
+	n, err := client.SInterStore(ctx, desset, myset, myset2).Result()
 
 	if err != nil {
 
@@ -626,9 +626,9 @@ func sinterstore(desset, myset, myset2 string) {
 }
 
 //redis命令：sdiff myset myset2 ...
-func sdiff(myset, myset2 string) {
+func sdiff(ctx context.Context, myset, myset2 string) {
 
-	vals, err := client.SDiff(myset, myset2).Result()
+	vals, err := client.SDiff(ctx, myset, myset2).Result()
 
 	if err != nil {
 
@@ -642,9 +642,9 @@ func sdiff(myset, myset2 string) {
 }
 
 //redis命令：sdiffstore desset myset myset2 ...
-func sdiffstore(desset, myset, myset2 string) {
+func sdiffstore(ctx context.Context, desset, myset, myset2 string) {
 
-	n, err := client.SDiffStore(desset, myset, myset2).Result()
+	n, err := client.SDiffStore(ctx, desset, myset, myset2).Result()
 
 	if err != nil {
 
@@ -655,7 +655,7 @@ func sdiffstore(desset, myset, myset2 string) {
 
 //有序集合zset类型数据操作
 //redis命令：zadd myzset score1 val1 score2 val2 score3 val3 ...
-func zadd(myzset, val1, val2, val3 string, score1, score2, score3 float64) {
+func zadd(ctx context.Context, myzset, val1, val2, val3 string, score1, score2, score3 float64) {
 
 	member1 := &redis.Z{
 		score1, val1}
@@ -664,7 +664,7 @@ func zadd(myzset, val1, val2, val3 string, score1, score2, score3 float64) {
 	member3 := &redis.Z{
 		score3, val3}
 
-	n, err := client.ZAdd(myzset, member1, member2, member3).Result()
+	n, err := client.ZAdd(ctx, myzset, member1, member2, member3).Result()
 
 	if err != nil {
 
@@ -674,9 +674,9 @@ func zadd(myzset, val1, val2, val3 string, score1, score2, score3 float64) {
 }
 
 //redis命令：zrem myzset val1 val2 ...
-func zrem(myzset, val1, val2 string) {
+func zrem(ctx context.Context, myzset, val1, val2 string) {
 
-	n, err := client.ZRem(myzset, val1, val2).Result()
+	n, err := client.ZRem(ctx, myzset, val1, val2).Result()
 
 	if err != nil {
 
@@ -686,12 +686,12 @@ func zrem(myzset, val1, val2 string) {
 }
 
 //redis命令：srange myzset start end [withscores]
-func zrange(myzset string, start, end, flag int64) {
+func zrange(ctx context.Context, myzset string, start, end, flag int64) {
 
 	if flag == 0 {
 
 		//不加withscores
-		vals, err := client.ZRange(myzset, start, end).Result()
+		vals, err := client.ZRange(ctx, myzset, start, end).Result()
 
 		if err != nil {
 
@@ -705,7 +705,7 @@ func zrange(myzset string, start, end, flag int64) {
 	} else if flag == 1 {
 
 		//加withscores
-		svals, err := client.ZRangeWithScores(myzset, start, end).Result()
+		svals, err := client.ZRangeWithScores(ctx, myzset, start, end).Result()
 
 		if err != nil {
 
@@ -720,12 +720,12 @@ func zrange(myzset string, start, end, flag int64) {
 }
 
 //redis命令：srevrange myzset start end [withscores]
-func zrevrange(myzset string, start, end, flag int64) {
+func zrevrange(ctx context.Context, myzset string, start, end, flag int64) {
 
 	if flag == 0 {
 
 		//不加withscores
-		vals, err := client.ZRevRange(myzset, start, end).Result()
+		vals, err := client.ZRevRange(ctx, myzset, start, end).Result()
 
 		if err != nil {
 
@@ -739,7 +739,7 @@ func zrevrange(myzset string, start, end, flag int64) {
 	} else if flag == 1 {
 
 		//加withscores
-		svals, err := client.ZRevRangeWithScores(myzset, start, end).Result()
+		svals, err := client.ZRevRangeWithScores(ctx, myzset, start, end).Result()
 
 		if err != nil {
 
@@ -754,12 +754,12 @@ func zrevrange(myzset string, start, end, flag int64) {
 }
 
 //redis命令：zrangebyscore myzset start end [withscores]
-func zrangebyscore(myzset, start, end string, flag int) {
+func zrangebyscore(ctx context.Context, myzset, start, end string, flag int) {
 
 	if flag == 0 {
 
 		//不加withscores
-		vals, err := client.ZRangeByScore(myzset, &redis.ZRangeBy{
+		vals, err := client.ZRangeByScore(ctx, myzset, &redis.ZRangeBy{
 			Min: start, Max: end, Count: 0}).Result()
 
 		if err != nil {
@@ -774,7 +774,7 @@ func zrangebyscore(myzset, start, end string, flag int) {
 	} else if flag == 1 {
 
 		//加withscores
-		svals, err := client.ZRangeByScoreWithScores(myzset, &redis.ZRangeBy{
+		svals, err := client.ZRangeByScoreWithScores(ctx, myzset, &redis.ZRangeBy{
 			Min: start, Max: end, Count: 0}).Result()
 
 		if err != nil {
@@ -790,9 +790,9 @@ func zrangebyscore(myzset, start, end string, flag int) {
 }
 
 //redis命令：zcard myzset
-func zcard(myzset string) {
+func zcard(ctx context.Context, myzset string) {
 
-	len, err := client.ZCard(myzset).Result()
+	len, err := client.ZCard(ctx, myzset).Result()
 
 	if err != nil {
 
@@ -802,9 +802,9 @@ func zcard(myzset string) {
 }
 
 //redis命令：zcount myzset minscore maxscore
-func zcount(myzset, minscore, maxscore string) {
+func zcount(ctx context.Context, myzset, minscore, maxscore string) {
 
-	n, err := client.ZCount(myzset, minscore, maxscore).Result()
+	n, err := client.ZCount(ctx, myzset, minscore, maxscore).Result()
 
 	if err != nil {
 
@@ -814,9 +814,9 @@ func zcount(myzset, minscore, maxscore string) {
 }
 
 //redis命令：zrank myzset val
-func zrank(myzset, val string) {
+func zrank(ctx context.Context, myzset, val string) {
 
-	index, err := client.ZRank(myzset, val).Result()
+	index, err := client.ZRank(ctx, myzset, val).Result()
 
 	if err != nil {
 
@@ -826,9 +826,9 @@ func zrank(myzset, val string) {
 }
 
 //redis命令：zscore myzset val
-func zscore(myzset, val string) {
+func zscore(ctx context.Context, myzset, val string) {
 
-	score, err := client.ZScore(myzset, val).Result()
+	score, err := client.ZScore(ctx, myzset, val).Result()
 
 	if err != nil {
 
